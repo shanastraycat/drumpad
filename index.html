@@ -9,57 +9,17 @@
 </head>
 <body>
     <div id="app">
-        <div>
-            <div id="waveform"></div>
-            <input type="range" min="0.0" max="1.0" v-model="masterVolume" step="0.01"> {{masterVolume}}
-            <select v-model="currentKit">
-                <option disabled value="">Please select one</option>
-                <option v-for="kit,key in soundBank">{{key}}</option>
-              </select>
-              <span>{{ currentKit }}</span>
-        </div>
-        <div class="container" @keydown.enter="keyPressed('enter')">
-            <div class="pad" @click="play(key)" v-for="clip,key in soundBank[currentKit].sprite">{{key}}</div>
+        <div id="waveform"></div>
+        <input type="range" min="0.0" max="1.0" v-model="masterVolume" step="0.01"> {{masterVolume}}
+        <span>{{ currentKit }}</span>
+
+        <div class="container">
+            <div class="pad" v-for="reg in regions"  @click.prevent="play(reg.id)">{{reg.id}}</div>
         </div>
     </div>
     <script src="https://unpkg.com/wavesurfer.js"></script>
     <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.regions.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="app.js"></script>
-    <script>
-        var TimelinePlugin = window.WaveSurfer.timeline;
-        var wavesurfer = WaveSurfer.create({
-            container: '#waveform',
-            waveColor: '#46d157',
-            progressColor: '#74d4e1',
-            plugins: [
-
-                WaveSurfer.regions.create({
-                    regions: [
-                        {
-                            start: 0,
-                            end: 0.2,
-                            drag:0,
-                            resize:0,
-                            loop: false,
-                            color: 'hsla(400, 100%, 30%, 0.5)'
-                        },
-                        {
-                            start: 1.85,
-                            end: 2.0,
-                            drag:0,
-                            resize:0,
-                            loop: false,
-                            color: 'hsla(400, 100%, 30%, 0.5)'
-                        }
-                    ]
-                })
-            ]
-        });
-        wavesurfer.load('kit3.mp3');
-        wavesurfer.setHeight(50)
-        
-    </script>
 </body>
 </html>

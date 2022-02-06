@@ -1,58 +1,109 @@
 const app = new Vue({
     el: '#app',
     data: {
-      soundBank:{
-        kit1:{
-            src:'kit1.mp3',
-            sprite: {
-              kick: [0, 160],
-              snare: [460, 160],
-              tom: [920, 160],
-              perc1: [1380, 160],
-              perc2: [1850, 160],
-            }
-        },
-        kit2:{
-            src:'kit2.mp3',
-            sprite: {
-              kick: [0, 160],
-              snare: [460, 160],
-              tom: [920, 160],
-              perc1: [1380, 160],
-              perc2: [1850, 160],
-            }
-        }
-      },
-      sound:{},
+      wavesurfer:{},
       currentKit: 'kit2',
-      masterVolume:0.7
+      masterVolume:0.7,
+      regions:{}
     },
     methods: {
         play: function (spri) {
-            this.sound.play(spri);
-        },
-        createSound:function(){
-            this.sound = new Howl({
-                src: [this.soundBank[this.currentKit].src],
-                sprite: this.soundBank[this.currentKit].sprite
-            });
-            this.sound.volume(this.masterVolume);
-        },
-        keyPressed(key) {
-            console.log(`${key} was pressed.`);
+            this.wavesurfer.regions.list[spri].play();
         }
-    },
-    mounted: function () {
-        fetch('soundbank.json')
-        .then(response => response.json())
-        .then(data => {this.soundBank = data;console.log(this.soundBank);this.createSound();});
     },
     watch: {
         masterVolume: function (val) {
-            this.sound.volume(this.masterVolume);
+            this.wavesurfer.setVolume(this.masterVolume);
         },
-        currentKit:function (val) {
-            this.createSound();
-        }
-    }
+    },
+    mounted: function () {
+        let wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: '#46d157',
+            progressColor: '#74d4e1',
+            plugins: [
+
+                WaveSurfer.regions.create({
+                    regions: [
+                        {
+                            id:"kick",
+                            start: 0,
+                            end: 0.2,
+                            drag:0,
+                            resize:0,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        },
+                        {
+                            id:"snare",
+                            start: 1.85,
+                            end: 2.0,
+                            drag:0,
+                            resize:0,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        },
+                        {
+                            id:"perc3",
+                            start: 3.71,
+                            end: 3.85,
+                            drag:0,
+                            resize:0,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        },
+                        {
+                            id:"perc4",
+                            start: 5.55,
+                            end: 5.70,
+                            drag:0,
+                            resize:0,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        },
+                        {
+                            id:"perc5",
+                            start: 7.40,
+                            end: 7.80,
+                            drag:0,
+                            resize:0,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        },
+                        {
+                            id:"perc6",
+                            start: 9.20,
+                            end: 9.4,
+                            drag:0,
+                            resize:0,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        },
+                        {
+                            id:"perc7",
+                            start: 11.08,
+                            end: 11.3,
+                            drag:0,
+                            resize:0,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        },
+                        {
+                            id:"perc8",
+                            start: 12.94,
+                            end: 13.05,
+                            drag:0,
+                            resize:0,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        }
+                    ]
+                })
+            ]
+        });
+        this.wavesurfer =  wavesurfer;
+        this.wavesurfer.load('kit3.mp3');
+        this.regions = this.wavesurfer.regions.list;
+        this.wavesurfer.setVolume(this.masterVolume);
+    },
 })
